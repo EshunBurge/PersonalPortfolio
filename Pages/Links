@@ -1,0 +1,660 @@
+<!-- =========================================================
+     Eshun Burge — LINKS
+     Rebuilt on the homepage design system: same :root palette,
+     Anton display type, grain/vignette/starfield, elevation
+     vars, zebra rules, gradient section rules, suit pips,
+     fixed logo + CSS-only hamburger side panel.
+
+     Paste into ONE Custom HTML block on the Links page.
+
+     >>> ONE THING TO DO BY HAND <<<
+     Search this file for  REPLACE_WITH_YOUR_DATA_URI  and paste
+     in the long  data:image/png;base64,....  value from the
+     <img> tag on your current Links page. (Or better: upload
+     that PNG to the WP media library and drop the URL in — it
+     shaves ~90KB off every page load.)
+
+     NOTE: as on the homepage, all animation start-states are
+     gated behind html.eb-js, so if WordPress strips the
+     <script> the page still renders fully — it just doesn't
+     animate.
+     ========================================================= -->
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;500;600;700&display=swap');
+
+  :root{
+    --bg:#0a0a0a;
+    --surface:#151514;
+    --surface-hi:#1c1c1a;
+    --line:#2a2a27;
+    --line-hi:#3a3a35;
+
+    --ink:#f3f2ee;
+    --body:#a9a9a1;
+    --muted:#96968f;
+    --dim:#5f5f5a;
+    --gold:#d8d8d3;
+    --gold-soft:#ffffff;
+
+    --display:'Anton', Impact, 'Arial Narrow', sans-serif;
+    --sans:'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+
+    --e1: inset 0 1px 0 rgba(255,255,255,.055), 0 2px 6px rgba(0,0,0,.5), 0 16px 36px -18px rgba(0,0,0,.9);
+    --e2: inset 0 1px 0 rgba(255,255,255,.07), 0 4px 12px rgba(0,0,0,.55), 0 48px 90px -32px rgba(0,0,0,.95);
+    --e3: inset 0 1px 0 rgba(255,255,255,.09), 0 6px 18px rgba(0,0,0,.6), 0 70px 120px -40px rgba(0,0,0,1);
+  }
+
+  *{ margin:0; padding:0; box-sizing:border-box; }
+  html{ scroll-behavior:smooth; -webkit-text-size-adjust:100%; }
+
+  /* Same continuous starfield as the homepage, fixed to the viewport. */
+  body{
+    color:var(--ink); font-family:var(--sans); overflow-x:hidden;
+    min-height:100vh;
+    background-color:var(--bg);
+    background-image:
+      radial-gradient(1px 1px at 10% 12%, rgba(255,255,255,.45) 0, transparent 50%),
+      radial-gradient(1px 1px at 85% 8%,  rgba(255,255,255,.32) 0, transparent 50%),
+      radial-gradient(1px 1px at 70% 55%, rgba(255,255,255,.36) 0, transparent 50%),
+      radial-gradient(1px 1px at 25% 78%, rgba(255,255,255,.28) 0, transparent 50%),
+      radial-gradient(1px 1px at 92% 42%, rgba(255,255,255,.28) 0, transparent 50%),
+      radial-gradient(1px 1px at 45% 30%, rgba(255,255,255,.24) 0, transparent 50%),
+      radial-gradient(1px 1px at 60% 88%, rgba(255,255,255,.24) 0, transparent 50%);
+    background-attachment:fixed;
+    padding:7.5rem 1.25rem 4.5rem;
+  }
+  #wp--skip-link--target, main.has-black-color-background-color{ background:transparent !important; }
+  img{ display:block; max-width:100%; }
+
+  @media (prefers-reduced-motion: reduce){
+    *{ animation-duration:.01ms !important; animation-iteration-count:1 !important; transition-duration:.01ms !important; }
+    html{ scroll-behavior:auto; }
+  }
+
+  .eb-logo:focus-visible, .eb-sp-links a:focus-visible, .eb-sp-foot a:focus-visible,
+  .eb-sp-social a:focus-visible, .eb-link:focus-visible{
+    outline:2px solid var(--gold); outline-offset:3px; border-radius:4px;
+  }
+  ::selection{ background:var(--gold); color:#0a0a0a; }
+  ::-moz-selection{ background:var(--gold); color:#0a0a0a; }
+
+  /* ---------------- ATMOSPHERE ---------------- */
+  .eb-grain{
+    position:fixed; inset:0; z-index:9998; pointer-events:none;
+    opacity:.05; mix-blend-mode:overlay;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='260' height='260'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.82' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+  .eb-vignette{
+    position:fixed; inset:0; z-index:9997; pointer-events:none;
+    background:radial-gradient(ellipse 120% 90% at 50% 45%, transparent 55%, rgba(0,0,0,.4) 100%);
+  }
+  .eb-topfade{
+    position:fixed; top:0; left:0; right:0; height:96px; z-index:999;
+    pointer-events:none;
+    background:linear-gradient(180deg, rgba(10,10,10,.95) 0%, rgba(10,10,10,.76) 42%, rgba(10,10,10,0) 100%);
+  }
+
+  /* ---------------- STATIC LOGO (top left) ---------------- */
+  .eb-logo{
+    position:fixed; top:22px; left:22px; z-index:1002;
+    height:54px; display:inline-flex; align-items:center; gap:10px;
+    padding:0 18px; border-radius:6px; text-decoration:none !important;
+    background:rgba(12,12,11,.72); border:1px solid var(--line-hi);
+    backdrop-filter:blur(12px) saturate(130%); -webkit-backdrop-filter:blur(12px) saturate(130%);
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.08), 0 12px 28px -12px rgba(0,0,0,1);
+    font-family:var(--display); font-weight:400; font-size:1.15rem; line-height:1;
+    letter-spacing:.05em; text-transform:uppercase; color:var(--ink) !important;
+    transition:border-color .25s ease, transform .25s ease;
+  }
+  .eb-logo:hover{ border-color:var(--gold); transform:translateY(-1px); }
+  .eb-logo svg{ width:15px; height:15px; fill:var(--gold); flex-shrink:0; }
+
+  /* ---------------- NAV — icon only + side panel ---------------- */
+  /* Checkbox-driven, so the menu still opens if WordPress strips the script. */
+  .eb-menu-cb{
+    position:fixed; top:22px; right:22px; z-index:1003;
+    width:54px; height:54px; margin:0; padding:0; opacity:0; cursor:pointer;
+    -webkit-appearance:none; appearance:none;
+  }
+  .eb-menu-btn{
+    position:fixed; top:22px; right:22px; z-index:1002; pointer-events:none;
+    width:54px; height:54px; border-radius:6px;
+    display:flex; flex-direction:column; align-items:center; justify-content:center; gap:6px;
+    background:rgba(12,12,11,.72); border:1px solid var(--line-hi);
+    backdrop-filter:blur(12px) saturate(130%); -webkit-backdrop-filter:blur(12px) saturate(130%);
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.08), 0 12px 28px -12px rgba(0,0,0,1);
+    transition:border-color .25s ease, background .25s ease, transform .25s ease;
+  }
+  .eb-menu-cb:hover ~ .eb-menu-btn{ border-color:var(--gold); transform:translateY(-1px); }
+  .eb-menu-cb:focus-visible ~ .eb-menu-btn{ border-color:var(--gold); box-shadow:0 0 0 3px rgba(216,216,211,.35); }
+  .eb-menu-btn span{
+    display:block; width:22px; height:1.5px; background:var(--ink); border-radius:2px;
+    transition:transform .35s cubic-bezier(.2,.9,.3,1), opacity .25s ease, width .35s ease;
+  }
+  .eb-menu-cb:checked ~ .eb-menu-btn span:nth-child(1){ transform:translateY(7.5px) rotate(45deg); }
+  .eb-menu-cb:checked ~ .eb-menu-btn span:nth-child(2){ opacity:0; width:0; }
+  .eb-menu-cb:checked ~ .eb-menu-btn span:nth-child(3){ transform:translateY(-7.5px) rotate(-45deg); }
+
+  .eb-scrim{
+    position:fixed; inset:0; z-index:1000; background:rgba(4,4,4,.65);
+    backdrop-filter:blur(3px); -webkit-backdrop-filter:blur(3px);
+    opacity:0; visibility:hidden; transition:opacity .4s ease, visibility .4s ease;
+    display:block; margin:0; border:0;
+  }
+  .eb-menu-cb:checked ~ .eb-scrim{ opacity:1; visibility:visible; }
+
+  .eb-sidepanel{
+    position:fixed; top:0; right:0; bottom:0; z-index:1001;
+    width:min(400px,86vw); display:flex; flex-direction:column;
+    background:linear-gradient(180deg,#131312 0%, #0d0d0c 100%);
+    border-left:1px solid var(--line-hi);
+    box-shadow:-40px 0 90px -30px rgba(0,0,0,1);
+    transform:translateX(100%); transition:transform .5s cubic-bezier(.16,.84,.44,1);
+    overflow-y:auto;
+  }
+  .eb-menu-cb:checked ~ .eb-sidepanel{ transform:translateX(0); }
+  .eb-sp-head{ padding:2rem 2rem 1.4rem; }
+  .eb-sp-name{
+    font-family:var(--display); font-weight:400; font-size:1.7rem; line-height:1;
+    letter-spacing:.02em; text-transform:uppercase; text-decoration:none !important; display:inline-block;
+    background:linear-gradient(176deg,#fff 0%, #e8e7e3 45%, #a5a59f 100%);
+    -webkit-background-clip:text; background-clip:text; color:transparent;
+  }
+  .eb-sp-sub{ display:block; margin-top:.5rem; font-size:10px; letter-spacing:.2em; text-transform:uppercase; color:var(--dim); }
+  .eb-sp-links{ display:flex; flex-direction:column; padding:.5rem 0 1rem; }
+  .eb-sp-links a{
+    position:relative; display:flex; align-items:center; justify-content:space-between; gap:1rem;
+    padding:1.05rem 2rem; color:var(--body) !important; text-decoration:none !important;
+    font-family:var(--display); font-weight:400; font-size:1.35rem; letter-spacing:.03em; text-transform:uppercase;
+    border-top:1px solid rgba(42,42,39,.7);
+    transition:color .25s ease, background .25s ease, padding-left .25s ease;
+  }
+  .eb-sp-links a:last-child{ border-bottom:1px solid rgba(42,42,39,.7); }
+  .eb-sp-links a .eb-idx{ font-family:var(--sans); font-size:9.5px; letter-spacing:.2em; color:var(--dim); }
+  .eb-sp-links a:hover, .eb-sp-links a:focus-visible, .eb-sp-links a.is-active{
+    color:var(--gold-soft) !important; background:rgba(255,255,255,.035); padding-left:2.5rem;
+  }
+  .eb-sp-links a.is-active .eb-idx{ color:var(--gold); }
+  .eb-sp-foot{ margin-top:auto; padding:1.6rem 2rem 2rem; }
+  .eb-sp-foot > a{ display:block; color:var(--muted) !important; text-decoration:none !important; font-size:12.5px; margin-bottom:.45rem; transition:color .25s ease; }
+  .eb-sp-foot > a:hover{ color:var(--gold-soft) !important; }
+  .eb-sp-social{ display:flex; gap:.6rem; margin-top:1.1rem; }
+  .eb-sp-social a{
+    width:36px; height:36px; border-radius:50%; border:1px solid var(--line-hi);
+    display:flex; align-items:center; justify-content:center; color:var(--ink) !important;
+    text-decoration:none !important;
+    transition:border-color .25s ease, color .25s ease, transform .25s ease;
+  }
+  .eb-sp-social a:hover{ border-color:var(--gold); color:var(--gold-soft) !important; transform:translateY(-2px); }
+  .eb-sp-social svg{ width:16px; height:16px; }
+
+  /* ================= THE CARD ================= */
+  .eb-page{ width:100%; max-width:480px; margin:0 auto; min-width:0; position:relative; z-index:2; }
+  .eb-card{
+    position:relative; overflow:hidden; border-radius:8px;
+    background:linear-gradient(180deg,var(--surface-hi) 0%, var(--surface) 55%, #121211 100%);
+    border:1px solid var(--line); box-shadow:var(--e3);
+  }
+  .eb-zebra{
+    position:relative; height:10px; z-index:5;
+    background-color:var(--gold);
+    background-image:repeating-linear-gradient(124deg,
+      #000 0 6px, #000 6px 8px, transparent 8px 8px, transparent 8px 18px,
+      #000 18px 26px, transparent 26px 40px, #000 40px 44px, transparent 44px 60px);
+    background-size:90px 100%;
+    box-shadow:0 1px 0 rgba(255,255,255,.18) inset, 0 10px 26px -6px rgba(0,0,0,.8);
+  }
+
+  /* ---------------- HEADER ---------------- */
+  .eb-head{ position:relative; padding:2.4rem 1.6rem 1.6rem; }
+  /* soft pool of light behind the name, same trick as the hero */
+  .eb-head::before{
+    content:''; position:absolute; left:50%; top:38%; width:120%; height:150%;
+    transform:translate(-50%,-50%); pointer-events:none;
+    background:radial-gradient(ellipse at center, rgba(255,255,255,.07) 0%, transparent 62%);
+  }
+  .eb-head-row{ position:relative; display:flex; align-items:center; gap:1rem; }
+  /* the name drives the row; the mark takes a fixed share so it can never
+     grow to swallow the header on a narrow screen */
+  .eb-head-text{ flex:1 1 auto; min-width:0; }
+  .eb-name{
+    font-family:var(--display); font-weight:400; text-transform:uppercase;
+    font-size:clamp(2.2rem, 9.5vw, 3.9rem); line-height:.9; letter-spacing:.01em; margin:0;
+    /* never break mid-word: sized so even a wide fallback face fits the row */
+    white-space:nowrap;
+    background:linear-gradient(176deg,#ffffff 0%, #f6f5f1 30%, #d8d8d3 60%, #8f8f89 100%);
+    -webkit-background-clip:text; background-clip:text; color:transparent;
+    filter:drop-shadow(0 1px 0 rgba(0,0,0,.85)) drop-shadow(0 3px 1px rgba(0,0,0,.45)) drop-shadow(0 20px 34px rgba(0,0,0,.75));
+    transition:opacity .9s ease, transform .9s cubic-bezier(.16,.84,.44,1);
+  }
+  .eb-js .eb-name{ opacity:0; transform:translateY(22px); }
+  body.eb-loaded .eb-name{ opacity:1; transform:translateY(0); }
+
+  .eb-mark{
+    flex:0 0 auto; width:clamp(88px, 30%, 140px); aspect-ratio:400/391; align-self:center;
+    border-radius:4px; overflow:hidden;
+    transition:opacity .9s ease, transform .9s cubic-bezier(.16,.84,.44,1);
+  }
+  .eb-mark img{
+    width:100%; height:100%; object-fit:cover; object-position:center;
+    filter:drop-shadow(0 0 16px rgba(255,255,255,.12));
+  }
+  .eb-js .eb-mark{ opacity:0; transform:translateY(22px) scale(.96); }
+  body.eb-loaded .eb-mark{ opacity:1; transform:translateY(0) scale(1); transition-delay:.15s; }
+
+  .eb-quote{
+    position:relative; margin-top:1.5rem; text-align:center;
+    font-size:13px; line-height:1.65; letter-spacing:.03em;
+    font-style:italic; color:var(--muted);
+    transition:opacity .9s ease, transform .9s ease;
+  }
+  .eb-js .eb-quote{ opacity:0; transform:translateY(14px); }
+  body.eb-loaded .eb-quote{ opacity:1; transform:translateY(0); transition-delay:.35s; }
+
+  /* the marquee of disciplines, same rule treatment as the hero */
+  .eb-marquee{
+    position:relative; margin-top:1.5rem; overflow:hidden; padding:.7rem 0;
+    -webkit-mask-image:linear-gradient(90deg, transparent, #000 14%, #000 86%, transparent);
+            mask-image:linear-gradient(90deg, transparent, #000 14%, #000 86%, transparent);
+    transition:opacity 1s ease;
+  }
+  .eb-js .eb-marquee{ opacity:0; }
+  body.eb-loaded .eb-marquee{ opacity:1; transition-delay:.55s; }
+  .eb-marquee::before, .eb-marquee::after{
+    content:''; position:absolute; left:0; right:0; height:1px; pointer-events:none; z-index:2;
+    background:linear-gradient(90deg, transparent, rgba(58,58,53,.85) 22%, rgba(58,58,53,.85) 78%, transparent);
+  }
+  .eb-marquee::before{ top:0; } .eb-marquee::after{ bottom:0; }
+  .eb-marquee-track{
+    display:flex; width:max-content; animation:eb-drift-l 30s linear infinite;
+    font-size:10px; font-weight:600; letter-spacing:.24em; text-transform:uppercase;
+    color:var(--body); white-space:nowrap;
+  }
+  .eb-marquee-track span{ padding:0 1rem; display:inline-flex; align-items:center; gap:1rem; }
+  .eb-marquee-track i{ font-style:normal; color:var(--gold); font-size:12px; }
+  @keyframes eb-drift-l{ from{ transform:translateX(0); } to{ transform:translateX(-50%); } }
+  .eb-marquee:hover .eb-marquee-track{ animation-play-state:paused; }
+
+  /* ---------------- BODY / SECTIONS ---------------- */
+  .eb-body{ position:relative; padding:.4rem 1.6rem 1.9rem; }
+  .eb-label{
+    display:flex; align-items:center; gap:10px;
+    font-size:10.5px; letter-spacing:.28em; text-transform:uppercase;
+    font-weight:600; color:var(--gold-soft); margin:2rem 0 .9rem;
+    text-shadow:0 0 18px rgba(255,255,255,.25);
+  }
+  .eb-label::after{ content:''; flex:1; height:1px; background:linear-gradient(90deg, var(--line-hi), transparent); }
+  .eb-label .eb-suit{ color:var(--gold); font-size:12px; opacity:.9; }
+  .eb-label:first-child{ margin-top:.6rem; }
+
+  /* WordPress themes love to underline links — pin them down.
+     BUT: border-bottom:none also wipes the bottom edge of the .eb-link rows,
+     which is why their hover border used to draw on three sides and stop.
+     The rows are excluded here and get their underline killed on their own. */
+  .eb-page a:not(.eb-link), .eb-page a:not(.eb-link):visited,
+  .eb-page a:not(.eb-link):hover, .eb-page a:not(.eb-link):active{
+    text-decoration:none !important; border-bottom:none !important;
+  }
+  .eb-page a.eb-link, .eb-page a.eb-link:visited,
+  .eb-page a.eb-link:hover, .eb-page a.eb-link:active{ text-decoration:none !important; }
+
+  /* ---------------- LINK ROWS ---------------- */
+  .eb-link{
+    position:relative; display:flex; align-items:center; gap:.95rem; overflow:hidden;
+    padding:.85rem .95rem; margin-bottom:.6rem;
+    background:linear-gradient(180deg, rgba(255,255,255,.045), rgba(255,255,255,.012));
+    border:1px solid var(--line); border-radius:5px;
+    box-shadow:var(--e1);
+    color:var(--ink) !important;
+    transition:transform .3s cubic-bezier(.16,.84,.44,1), box-shadow .3s ease, border-color .25s ease, background .25s ease;
+  }
+  .eb-link:hover, .eb-link:focus-visible{
+    transform:translateX(4px); border-color:var(--gold);
+    background:linear-gradient(180deg, rgba(255,255,255,.07), rgba(255,255,255,.02));
+    box-shadow:var(--e2);
+  }
+  /* the same sheen sweep the homepage buttons use */
+  .eb-link::before{
+    content:''; position:absolute; top:0; left:-60%; width:40%; height:100%;
+    background:linear-gradient(115deg, transparent, rgba(255,255,255,.16), transparent);
+    transition:left .55s ease; pointer-events:none;
+  }
+  .eb-link:hover::before{ left:130%; }
+  /* corner pip, like the index on a playing card */
+  .eb-link::after{
+    content:attr(data-suit); position:absolute; right:11px; top:8px;
+    font-size:1.05rem; line-height:1; color:var(--ink); opacity:.09; pointer-events:none;
+    transition:opacity .3s ease, transform .3s ease;
+  }
+  .eb-link:hover::after{ opacity:.3; transform:translateY(-1px) scale(1.08); }
+
+  .eb-tag{
+    flex-shrink:0; width:38px; height:38px; border-radius:50%;
+    border:1px solid var(--line-hi); color:var(--gold);
+    background:linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,0));
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.08), 0 8px 18px -10px rgba(0,0,0,1);
+    display:flex; align-items:center; justify-content:center;
+    transition:border-color .25s ease, color .25s ease;
+  }
+  .eb-link:hover .eb-tag{ border-color:var(--gold); color:var(--gold-soft); }
+  .eb-tag svg{ width:17px; height:17px; }
+
+  .eb-link-text{ min-width:0; }
+  .eb-link-title{
+    display:block; font-family:var(--display); font-weight:400; text-transform:uppercase;
+    font-size:1rem; line-height:1.1; letter-spacing:.025em; color:var(--ink);
+  }
+  .eb-link-sub{
+    display:block; margin-top:.25rem;
+    font-size:10.5px; letter-spacing:.14em; text-transform:uppercase; color:var(--dim);
+  }
+
+  /* reveal, gated behind html.eb-js so a stripped script still shows everything */
+  .eb-reveal{ transition:opacity .7s ease, transform .7s cubic-bezier(.16,.84,.44,1); }
+  .eb-js .eb-reveal{ opacity:0; transform:translateY(20px); }
+  .eb-js .eb-reveal.is-visible{ opacity:1; transform:translateY(0); }
+  @media (prefers-reduced-motion:reduce){
+    .eb-reveal, .eb-name, .eb-mark, .eb-quote, .eb-marquee{
+      opacity:1 !important; transform:none !important; transition:none !important;
+    }
+  }
+
+  /* ---------------- FOOTER ---------------- */
+  .eb-foot{
+    margin-top:1.6rem; text-align:center;
+    font-size:9.5px; letter-spacing:.24em; text-transform:uppercase; color:#4a4a46;
+  }
+  .eb-foot a{ color:var(--muted) !important; transition:color .25s ease; }
+  .eb-foot a:hover{ color:var(--gold-soft) !important; }
+  .eb-foot span + span::before{ content:'·'; margin:0 .55rem; color:var(--line-hi); }
+
+  /* =========================================================================
+     MOBILE / TOUCH
+     ========================================================================= */
+  @media (hover:none){
+    .eb-link:hover, .eb-logo:hover, .eb-sp-social a:hover{ transform:none; }
+  }
+
+  @media (max-width:680px){
+    body{ padding:6.5rem 1rem 3.5rem; }
+    .eb-logo{ top:14px; left:14px; height:46px; padding:0 13px; gap:8px; font-size:.98rem; letter-spacing:.04em; }
+    .eb-logo svg{ width:13px; height:13px; }
+    .eb-menu-cb, .eb-menu-btn{ top:14px; right:14px; width:46px; height:46px; }
+    .eb-menu-btn{ gap:5px; }
+    .eb-menu-btn span{ width:19px; }
+    .eb-menu-cb:checked ~ .eb-menu-btn span:nth-child(1){ transform:translateY(6.5px) rotate(45deg); }
+    .eb-menu-cb:checked ~ .eb-menu-btn span:nth-child(3){ transform:translateY(-6.5px) rotate(-45deg); }
+    .eb-topfade{ height:88px; }
+
+    .eb-head{ padding:2rem 1.25rem 1.35rem; }
+    .eb-body{ padding:.3rem 1.25rem 1.6rem; }
+    .eb-label{ font-size:9.5px; letter-spacing:.24em; margin:1.7rem 0 .8rem; }
+    .eb-link{ padding:.8rem .85rem; gap:.8rem; }
+    .eb-tag{ width:36px; height:36px; }
+    .eb-tag svg{ width:16px; height:16px; }
+    .eb-link-title{ font-size:.95rem; }
+    .eb-link-sub{ font-size:10px; letter-spacing:.12em; }
+  }
+
+  /* Below this the name and the mark stop sharing a row comfortably. */
+  @media (max-width:365px){
+    .eb-logo{ font-size:.88rem; padding:0 11px; gap:7px; }
+    .eb-head-row{ flex-wrap:wrap; justify-content:center; }
+    .eb-head-text{ width:100%; text-align:center; }
+    .eb-name{ font-size:2.9rem; }
+    .eb-mark{ width:135px; margin:.9rem auto 0; }
+    .eb-sp-links a{ font-size:1.2rem; padding:.95rem 1.5rem; }
+    .eb-sp-head, .eb-sp-foot{ padding-left:1.5rem; padding-right:1.5rem; }
+  }
+</style>
+
+<div class="eb-grain" aria-hidden="true"></div>
+<div class="eb-vignette" aria-hidden="true"></div>
+<div class="eb-topfade" aria-hidden="true"></div>
+
+<!-- ============== NAV — logo + menu icon + side panel ============== -->
+<a href="/" class="eb-logo" aria-label="Eshun Burge — home">
+  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7.5-4.7-7.5-10A4.5 4.5 0 0 1 12 7.6 4.5 4.5 0 0 1 19.5 11c0 5.3-7.5 10-7.5 10z"></path></svg>
+  <span>Eshun Burge</span>
+</a>
+
+<input type="checkbox" id="ebMenuToggle" class="eb-menu-cb" aria-label="Toggle menu">
+<div class="eb-menu-btn" aria-hidden="true"><span></span><span></span><span></span></div>
+<label class="eb-scrim" for="ebMenuToggle" aria-hidden="true"></label>
+
+<aside class="eb-sidepanel" id="ebPanel" aria-label="Main menu">
+  <div class="eb-sp-head">
+    <a href="/" class="eb-sp-name">Eshun Burge</a>
+    <span class="eb-sp-sub">Bradenton · Florida</span>
+  </div>
+
+  <nav class="eb-sp-links" aria-label="Primary">
+    <a href="/"><span>Home</span><span class="eb-idx">00</span></a>
+    <a href="/software-design/"><span>Software Design</span><span class="eb-idx">01</span></a>
+    <a href="/graphic-design/"><span>Graphic Design</span><span class="eb-idx">02</span></a>
+    <a href="/science-projects/"><span>Science Projects</span><span class="eb-idx">03</span></a>
+    <a href="/just-for-fun/"><span>Just for Fun</span><span class="eb-idx">04</span></a>
+    <a href="/about/"><span>About Me</span><span class="eb-idx">05</span></a>
+    <a href="/links/" class="is-active" aria-current="page"><span>Links</span><span class="eb-idx">06</span></a>
+    <a href="/contact/"><span>Contact</span><span class="eb-idx">07</span></a>
+  </nav>
+
+  <div class="eb-sp-foot">
+    <a href="mailto:eshunburge@gmail.com">eshunburge@gmail.com</a>
+    <a href="tel:+19419009134">+1 (941) 900-9134</a>
+    <div class="eb-sp-social">
+      <a href="https://www.linkedin.com/in/eshunburge" target="_blank" rel="noopener" aria-label="LinkedIn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="7" r="2"></circle><circle cx="18" cy="7" r="2"></circle><circle cx="12" cy="18" r="2"></circle><path d="M7.7 8.5L11 16M16.3 8.5L13 16M8.2 7h7.6"></path></svg>
+      </a>
+      <a href="https://github.com/EshunBurge" target="_blank" rel="noopener" aria-label="GitHub">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 6.5L3 12l5.5 5.5M15.5 6.5L21 12l-5.5 5.5"></path></svg>
+      </a>
+      <a href="https://www.instagram.com/eshunburge" target="_blank" rel="noopener" aria-label="Instagram">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="5"></rect><circle cx="12" cy="12" r="3.6"></circle><circle cx="16.3" cy="7.7" r="0.6" fill="currentColor" stroke="none"></circle></svg>
+      </a>
+    </div>
+  </div>
+</aside>
+
+<!-- ============== THE CARD ============== -->
+<div class="eb-page">
+  <div class="eb-card">
+    <div class="eb-zebra"></div>
+
+    <header class="eb-head">
+      <div class="eb-head-row">
+        <div class="eb-head-text">
+          <h1 class="eb-name">Eshun<br>Burge</h1>
+        </div>
+        <div class="eb-mark" aria-hidden="true">
+          <!-- ▼▼▼ paste your existing data:image/png;base64,... value here ▼▼▼ -->
+          <img src="REPLACE_WITH_YOUR_DATA_URI" alt="">
+          <!-- ▲▲▲ ------------------------------------------------- ▲▲▲ -->
+        </div>
+      </div>
+
+      <p class="eb-quote">“everyone is different, that means anyone can fit in”</p>
+
+      <div class="eb-marquee" aria-hidden="true">
+        <div class="eb-marquee-track">
+          <span>Software Design <i>♠</i> Graphic Design <i>♥</i> Science Research <i>♦</i> Photography <i>♣</i></span>
+          <span>Software Design <i>♠</i> Graphic Design <i>♥</i> Science Research <i>♦</i> Photography <i>♣</i></span>
+        </div>
+      </div>
+    </header>
+
+    <div class="eb-body">
+
+      <p class="eb-label"><span class="eb-suit">♠</span>Work</p>
+
+      <a class="eb-link eb-reveal" href="https://eshun.net" target="_blank" rel="noopener" data-suit="♠">
+        <span class="eb-tag">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.5"></circle><path d="M3.5 12h17M12 3.5c2.4 2.3 3.8 5.3 3.8 8.5s-1.4 6.2-3.8 8.5c-2.4-2.3-3.8-5.3-3.8-8.5s1.4-6.2 3.8-8.5z"></path></svg>
+        </span>
+        <span class="eb-link-text">
+          <span class="eb-link-title">Personal Portfolio</span>
+          <span class="eb-link-sub">eshun.net</span>
+        </span>
+      </a>
+
+      <a class="eb-link eb-reveal" style="transition-delay:.05s" href="https://github.com/EshunBurge" target="_blank" rel="noopener" data-suit="♥">
+        <span class="eb-tag">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 6.5L3 12l5.5 5.5M15.5 6.5L21 12l-5.5 5.5"></path></svg>
+        </span>
+        <span class="eb-link-text">
+          <span class="eb-link-title">GitHub</span>
+          <span class="eb-link-sub">@EshunBurge</span>
+        </span>
+      </a>
+
+      <a class="eb-link eb-reveal" style="transition-delay:.1s" href="https://scrapbook.hackclub.com/Eshun" target="_blank" rel="noopener" data-suit="♦">
+        <span class="eb-tag">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4.5h11l3 3v12H5z"></path><path d="M16 4.5v3h3M8.2 11h7.6M8.2 14.2h7.6M8.2 17.4h4.6"></path></svg>
+        </span>
+        <span class="eb-link-text">
+          <span class="eb-link-title">Hack Club Scrapbook</span>
+          <span class="eb-link-sub">Build log · /Eshun</span>
+        </span>
+      </a>
+
+      <a class="eb-link eb-reveal" style="transition-delay:.15s" href="https://www.linkedin.com/in/eshunburge" target="_blank" rel="noopener" data-suit="♣">
+        <span class="eb-tag">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="7" r="2"></circle><circle cx="18" cy="7" r="2"></circle><circle cx="12" cy="18" r="2"></circle><path d="M7.7 8.5L11 16M16.3 8.5L13 16M8.2 7h7.6"></path></svg>
+        </span>
+        <span class="eb-link-text">
+          <span class="eb-link-title">LinkedIn</span>
+          <span class="eb-link-sub">/in/eshunburge</span>
+        </span>
+      </a>
+
+      <p class="eb-label"><span class="eb-suit">♥</span>Creative</p>
+
+      <a class="eb-link eb-reveal" href="https://www.instagram.com/profeshunal.photography/" target="_blank" rel="noopener" data-suit="♥">
+        <span class="eb-tag">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8h3l1.4-2h7.2L17 8h3a1 1 0 0 1 1 1v9.5a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1z"></path><circle cx="12" cy="13.5" r="3.3"></circle></svg>
+        </span>
+        <span class="eb-link-text">
+          <span class="eb-link-title">Prof-ESHUN-al Photography</span>
+          <span class="eb-link-sub">@profeshunal.photography</span>
+        </span>
+      </a>
+
+      <a class="eb-link eb-reveal" style="transition-delay:.05s" href="https://vsco.co/eshunburge/" target="_blank" rel="noopener" data-suit="♦">
+        <span class="eb-tag">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8"></circle><circle cx="12" cy="6.7" r="1.1"></circle><circle cx="16.6" cy="9.3" r="1.1"></circle><circle cx="16.6" cy="14.7" r="1.1"></circle><circle cx="12" cy="17.3" r="1.1"></circle><circle cx="7.4" cy="14.7" r="1.1"></circle><circle cx="7.4" cy="9.3" r="1.1"></circle></svg>
+        </span>
+        <span class="eb-link-text">
+          <span class="eb-link-title">VSCO</span>
+          <span class="eb-link-sub">Prof-ESHUN-al Pictures</span>
+        </span>
+      </a>
+
+      <p class="eb-label"><span class="eb-suit">♣</span>Social</p>
+
+      <a class="eb-link eb-reveal" href="https://www.instagram.com/eshunburge" target="_blank" rel="noopener" data-suit="♣">
+        <span class="eb-tag">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="5"></rect><circle cx="12" cy="12" r="3.6"></circle><circle cx="16.3" cy="7.7" r="0.6" fill="currentColor" stroke="none"></circle></svg>
+        </span>
+        <span class="eb-link-text">
+          <span class="eb-link-title">Instagram</span>
+          <span class="eb-link-sub">@eshunburge</span>
+        </span>
+      </a>
+
+      <a class="eb-link eb-reveal" style="transition-delay:.05s" href="https://www.tiktok.com/@eshunburge" target="_blank" rel="noopener" data-suit="♠">
+        <span class="eb-tag">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="9.5" cy="16.5" r="2.8"></circle><path d="M12.3 16.5V4.5c.4 2.3 2.2 4 4.7 4.2"></path></svg>
+        </span>
+        <span class="eb-link-text">
+          <span class="eb-link-title">TikTok</span>
+          <span class="eb-link-sub">@eshunburge</span>
+        </span>
+      </a>
+
+      <a class="eb-link eb-reveal" style="transition-delay:.1s" href="https://www.youtube.com/@eshunburge" target="_blank" rel="noopener" data-suit="♥">
+        <span class="eb-tag">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6" width="18" height="12" rx="4"></rect><path d="M10.3 9.7l4.8 2.3-4.8 2.3z" fill="currentColor" stroke="none"></path></svg>
+        </span>
+        <span class="eb-link-text">
+          <span class="eb-link-title">YouTube</span>
+          <span class="eb-link-sub">@eshunburge</span>
+        </span>
+      </a>
+
+      <a class="eb-link eb-reveal" style="transition-delay:.15s" href="https://www.pinterest.com/eshunburge" target="_blank" rel="noopener" data-suit="♦">
+        <span class="eb-tag">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s6.5-6.2 6.5-11A6.5 6.5 0 1 0 5.5 10c0 4.8 6.5 11 6.5 11z"></path><circle cx="12" cy="10" r="2.3"></circle></svg>
+        </span>
+        <span class="eb-link-text">
+          <span class="eb-link-title">Pinterest</span>
+          <span class="eb-link-sub">@eshunburge</span>
+        </span>
+      </a>
+
+    </div>
+
+    <div class="eb-zebra"></div>
+  </div>
+
+  <footer class="eb-foot">
+    <span>© <span id="ebYear">2026</span> Eshun Burge</span>
+    <span>Bradenton, Florida</span>
+  </footer>
+</div>
+
+<script>
+(function(){
+  /* Tells the CSS that JS is alive. Without this class nothing is hidden,
+     so a stripped <script> degrades to a fully visible, static page. */
+  document.documentElement.classList.add('eb-js');
+
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* ---- entrance ---- */
+  function loaded(){ document.body.classList.add('eb-loaded'); }
+  if (document.readyState === 'complete') setTimeout(loaded, 60);
+  else window.addEventListener('load', function(){ setTimeout(loaded, 60); });
+  setTimeout(loaded, 1200);   /* belt and braces if load never fires */
+
+  /* ---- scroll reveals ---- */
+  (function(){
+    var items = document.querySelectorAll('.eb-reveal');
+    if (!items.length) return;
+    if (reduce || !('IntersectionObserver' in window)){
+      items.forEach(function(el){ el.classList.add('is-visible'); });
+      return;
+    }
+    var obs = new IntersectionObserver(function(entries){
+      entries.forEach(function(en){
+        if (!en.isIntersecting) return;
+        en.target.classList.add('is-visible');
+        /* clear the stagger delay once it has played, so hover stays snappy */
+        setTimeout(function(){ en.target.style.transitionDelay = '0s'; }, 900);
+        obs.unobserve(en.target);
+      });
+    }, { threshold:0.12, rootMargin:'0px 0px -30px 0px' });
+    items.forEach(function(el){ obs.observe(el); });
+  })();
+
+  /* ---- side panel: close on Escape, lock scroll while open ---- */
+  (function(){
+    var cb = document.getElementById('ebMenuToggle'), panel = document.getElementById('ebPanel');
+    if (!cb) return;
+    function sync(){
+      document.body.style.overflow = cb.checked ? 'hidden' : '';
+      if (panel) panel.setAttribute('aria-hidden', cb.checked ? 'false' : 'true');
+    }
+    cb.addEventListener('change', sync);
+    document.addEventListener('keydown', function(e){
+      if (e.key === 'Escape' && cb.checked){ cb.checked = false; sync(); }
+    });
+    sync();
+  })();
+
+  /* ---- footer year ---- */
+  (function(){
+    var y = document.getElementById('ebYear');
+    if (y) y.textContent = new Date().getFullYear();
+  })();
+})();
+</script>
