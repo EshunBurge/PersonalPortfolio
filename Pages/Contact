@@ -1,0 +1,1055 @@
+<!-- =========================================================
+     Eshun Burge — CONTACT
+     Same design system as the homepage: identical palette,
+     Anton display type, grain/vignette, fixed logo + hamburger
+     side panel, zebra rules, elevation vars, footer.
+
+     Paste into ONE Custom HTML block on the Contact page.
+
+     NOTE: as on the homepage, every animation start-state is
+     gated behind html.eb-js. If WordPress strips the <script>,
+     the page still renders fully — it just doesn't animate.
+     ========================================================= -->
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;500;600;700&display=swap');
+
+  :root{
+    --bg:#0a0a0a;
+    --surface:#151514;
+    --surface-hi:#1c1c1a;
+    --line:#2a2a27;
+    --line-hi:#3a3a35;
+
+    --ink:#f3f2ee;
+    --body:#a9a9a1;
+    --muted:#96968f;
+    --dim:#5f5f5a;
+    --gold:#d8d8d3;
+    --gold-soft:#ffffff;
+
+    --display:'Anton', Impact, 'Arial Narrow', sans-serif;
+    --sans:'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+
+    --e1: inset 0 1px 0 rgba(255,255,255,.055), 0 2px 6px rgba(0,0,0,.5), 0 16px 36px -18px rgba(0,0,0,.9);
+    --e2: inset 0 1px 0 rgba(255,255,255,.07), 0 4px 12px rgba(0,0,0,.55), 0 48px 90px -32px rgba(0,0,0,.95);
+    --e3: inset 0 1px 0 rgba(255,255,255,.09), 0 6px 18px rgba(0,0,0,.6), 0 70px 120px -40px rgba(0,0,0,1);
+
+    --wrap:1180px;
+  }
+
+  *{ margin:0; padding:0; box-sizing:border-box; }
+  html{ scroll-behavior:smooth; }
+
+  /* ONE continuous background — same starfield as the homepage, fixed to the
+     viewport so there are no section bands or seams anywhere on the site. */
+  body{
+    color:var(--ink); font-family:var(--sans); overflow-x:hidden;
+    background-color:var(--bg);
+    background-image:
+      radial-gradient(1px 1px at 10% 12%, rgba(255,255,255,.45) 0, transparent 50%),
+      radial-gradient(1px 1px at 85% 8%,  rgba(255,255,255,.32) 0, transparent 50%),
+      radial-gradient(1px 1px at 70% 55%, rgba(255,255,255,.36) 0, transparent 50%),
+      radial-gradient(1px 1px at 25% 78%, rgba(255,255,255,.28) 0, transparent 50%),
+      radial-gradient(1px 1px at 92% 42%, rgba(255,255,255,.28) 0, transparent 50%),
+      radial-gradient(1px 1px at 45% 30%, rgba(255,255,255,.24) 0, transparent 50%),
+      radial-gradient(1px 1px at 60% 88%, rgba(255,255,255,.24) 0, transparent 50%);
+    background-attachment:fixed;
+  }
+  #wp--skip-link--target, main.has-black-color-background-color{ background:transparent !important; }
+
+  /* WordPress block themes put flow spacing between the top-level children of
+     the content area, and this block's chrome elements ARE top-level children.
+     That spacing opened an empty strip above the page head. Zero it out so the
+     head starts flush against the top of the content area. */
+  .wp-site-blocks > *:not(.eb-logo):not(.eb-menu-cb):not(.eb-menu-btn),
+  .entry-content > *:not(.eb-logo):not(.eb-menu-cb):not(.eb-menu-btn),
+  .wp-block-post-content > *:not(.eb-logo):not(.eb-menu-cb):not(.eb-menu-btn),
+  #wp--skip-link--target > *:not(.eb-logo):not(.eb-menu-cb):not(.eb-menu-btn){
+    margin-block-start:0 !important;
+  }
+  /* ...with one deliberate exception. The homepage does NOT zero this, so the
+     theme's gap lands on its logo and menu button and seats them slightly
+     lower than their CSS top: value. Leaving those three elements out of the
+     rule above means they inherit the identical gap here, so the floating
+     chrome lines up with the homepage whatever that gap turns out to be. */
+  #wp--skip-link--target, .entry-content, .wp-block-post-content{
+    margin-top:0 !important; padding-top:0 !important;
+  }
+  img{ display:block; max-width:100%; }
+
+  @media (prefers-reduced-motion: reduce){
+    *{ animation-duration:.01ms !important; animation-iteration-count:1 !important; transition-duration:.01ms !important; }
+    html{ scroll-behavior:auto; }
+  }
+
+  .eb-logo:focus-visible, .eb-sp-links a:focus-visible, .eb-sp-foot a:focus-visible,
+  .eb-sp-social a:focus-visible, .eb-btn:focus-visible, .eb-ccard:focus-visible,
+  .eb-footer-links a:focus-visible, .eb-footer-contact a:focus-visible,
+  .eb-footer-social a:focus-visible{
+    outline:2px solid var(--gold); outline-offset:3px; border-radius:4px;
+  }
+  ::selection{ background:var(--gold); color:#0a0a0a; }
+  ::-moz-selection{ background:var(--gold); color:#0a0a0a; }
+
+  /* ---------------- ATMOSPHERE ---------------- */
+  .eb-grain{
+    position:fixed; inset:0; z-index:9998; pointer-events:none;
+    opacity:.05; mix-blend-mode:overlay;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='260' height='260'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.82' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+  .eb-vignette{
+    position:fixed; inset:0; z-index:9997; pointer-events:none;
+    background:radial-gradient(ellipse 120% 90% at 50% 45%, transparent 55%, rgba(0,0,0,.4) 100%);
+  }
+  .eb-topfade{
+    position:fixed; top:0; left:0; right:0; height:96px; z-index:999;
+    pointer-events:none; display:none;
+    background:linear-gradient(180deg, rgba(10,10,10,.95) 0%, rgba(10,10,10,.76) 42%, rgba(10,10,10,0) 100%);
+  }
+  @media (max-width:900px){ .eb-topfade{ display:block; } }
+
+  /* ---------------- SHARED ---------------- */
+  .eb-zebra{
+    position:relative; height:10px; z-index:5;
+    background-color:var(--gold);
+    background-image:repeating-linear-gradient(124deg,
+      #000 0 6px, #000 6px 8px, transparent 8px 8px, transparent 8px 18px,
+      #000 18px 26px, transparent 26px 40px, #000 40px 44px, transparent 44px 60px);
+    background-size:90px 100%;
+    box-shadow:0 1px 0 rgba(255,255,255,.18) inset, 0 10px 26px -6px rgba(0,0,0,.8);
+  }
+  .eb-wrap{ max-width:var(--wrap); margin:0 auto; }
+  .eb-sec{ position:relative; padding:5.5rem 1.5rem; background:transparent; }
+  .eb-label{
+    display:flex; align-items:center; gap:10px;
+    font-size:11px; letter-spacing:.28em; text-transform:uppercase;
+    font-weight:600; color:var(--gold-soft); margin:0 0 14px;
+    text-shadow:0 0 18px rgba(255,255,255,.25);
+  }
+  .eb-label::after{ content:''; flex:1; height:1px; background:linear-gradient(90deg, var(--line-hi), transparent); }
+  .eb-label.is-centered{ justify-content:center; }
+  .eb-label.is-centered::before{ content:''; flex:0 0 64px; height:1px; background:linear-gradient(90deg, transparent, var(--line-hi)); }
+  .eb-label.is-centered::after{ flex:0 0 64px; }
+  .eb-h2{
+    font-family:var(--display); font-weight:400; text-transform:uppercase;
+    font-size:clamp(2.2rem, 5.5vw, 4rem); line-height:.94; letter-spacing:.01em; margin:0;
+    background:linear-gradient(176deg,#ffffff 0%, #f2f1ed 38%, #d8d8d3 68%, #8f8f89 100%);
+    -webkit-background-clip:text; background-clip:text; color:transparent;
+    filter:drop-shadow(0 1px 0 rgba(0,0,0,.8)) drop-shadow(0 16px 30px rgba(0,0,0,.65));
+  }
+  .eb-lede{ margin-top:1.1rem; font-size:14.5px; line-height:1.75; color:var(--body); max-width:56ch; }
+  .eb-sec-head{ margin-bottom:3rem; }
+  .eb-sec-head.is-centered{ text-align:center; }
+  .eb-sec-head.is-centered .eb-lede{ margin-left:auto; margin-right:auto; }
+  .eb-btn{
+    display:inline-flex; align-items:center; justify-content:space-between; gap:16px;
+    padding:15px 18px; background:linear-gradient(180deg,#1f1f1c,#171715);
+    border:1px solid var(--line-hi); border-radius:4px;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.06), 0 10px 24px -12px rgba(0,0,0,1);
+    color:var(--ink) !important; text-decoration:none !important;
+    font-size:11px; font-weight:600; letter-spacing:.2em; text-transform:uppercase;
+    position:relative; overflow:hidden;
+    transition:border-color .2s ease, background .2s ease, transform .2s ease, box-shadow .2s ease;
+  }
+  .eb-btn::before{
+    content:''; position:absolute; top:0; left:-60%; width:40%; height:100%;
+    background:linear-gradient(115deg, transparent, rgba(255,255,255,.16), transparent);
+    transition:left .55s ease;
+  }
+  .eb-btn:hover{
+    background:linear-gradient(180deg,#26261f,#1c1c19); border-color:var(--gold); transform:translateY(-2px);
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.09), 0 16px 30px -14px rgba(0,0,0,1);
+  }
+  .eb-btn:hover::before{ left:130%; }
+  .eb-btn .eb-arrow{ font-size:14px; letter-spacing:0; color:var(--gold); }
+  .eb-btn-solid{ background:var(--gold); border-color:var(--gold); color:#0a0a0a !important; }
+  .eb-btn-solid .eb-arrow{ color:#0a0a0a; }
+  .eb-btn-solid:hover{ background:#fff; border-color:#fff; color:#0a0a0a !important; }
+
+  /* Animation start-states apply ONLY when JS is running (html.eb-js).
+     If the script is stripped or fails, everything renders visible. */
+  .eb-reveal{ transition:opacity .9s ease, transform .9s cubic-bezier(.16,.84,.44,1); }
+  .eb-js .eb-reveal{ opacity:0; transform:translateY(34px); }
+  .eb-js .eb-reveal.is-visible{ opacity:1; transform:translateY(0); }
+  @media (prefers-reduced-motion:reduce){
+    .eb-reveal{ opacity:1 !important; transform:none !important; transition:none !important; }
+  }
+
+  /* ---------------- STATIC LOGO (top left) ---------------- */
+  .eb-logo{
+    position:fixed; top:22px; left:22px; z-index:1002;
+    height:54px; display:inline-flex; align-items:center; gap:10px;
+    padding:0 18px; border-radius:6px; text-decoration:none !important;
+    background:rgba(12,12,11,.72); border:1px solid var(--line-hi);
+    backdrop-filter:blur(12px) saturate(130%); -webkit-backdrop-filter:blur(12px) saturate(130%);
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.08), 0 12px 28px -12px rgba(0,0,0,1);
+    font-family:var(--display); font-weight:400; font-size:1.15rem; line-height:1;
+    letter-spacing:.05em; text-transform:uppercase; color:var(--ink) !important;
+    transition:border-color .25s ease, transform .25s ease;
+  }
+  .eb-logo:hover{ border-color:var(--gold); transform:translateY(-1px); }
+  .eb-logo svg{ width:15px; height:15px; fill:var(--gold); flex-shrink:0; }
+
+  /* ---------------- NAV — icon only + side panel ---------------- */
+  /* The real control is a checkbox, so the menu opens with CSS alone and
+     keeps working even if WordPress strips the <script>. */
+  .eb-menu-cb{
+    position:fixed; top:22px; right:22px; z-index:1003;
+    width:54px; height:54px; margin:0; padding:0; opacity:0; cursor:pointer;
+    -webkit-appearance:none; appearance:none;
+  }
+  .eb-menu-btn{
+    position:fixed; top:22px; right:22px; z-index:1002; pointer-events:none;
+    width:54px; height:54px; border-radius:6px;
+    display:flex; flex-direction:column; align-items:center; justify-content:center; gap:6px;
+    background:rgba(12,12,11,.72); border:1px solid var(--line-hi);
+    backdrop-filter:blur(12px) saturate(130%); -webkit-backdrop-filter:blur(12px) saturate(130%);
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.08), 0 12px 28px -12px rgba(0,0,0,1);
+    transition:border-color .25s ease, background .25s ease, transform .25s ease;
+  }
+  .eb-menu-cb:hover ~ .eb-menu-btn{ border-color:var(--gold); transform:translateY(-1px); }
+  .eb-menu-cb:focus-visible ~ .eb-menu-btn{ border-color:var(--gold); box-shadow:0 0 0 3px rgba(216,216,211,.35); }
+  .eb-menu-btn span{
+    display:block; width:22px; height:1.5px; background:var(--ink); border-radius:2px;
+    transition:transform .35s cubic-bezier(.2,.9,.3,1), opacity .25s ease, width .35s ease;
+  }
+  .eb-menu-cb:checked ~ .eb-menu-btn span:nth-child(1){ transform:translateY(7.5px) rotate(45deg); }
+  .eb-menu-cb:checked ~ .eb-menu-btn span:nth-child(2){ opacity:0; width:0; }
+  .eb-menu-cb:checked ~ .eb-menu-btn span:nth-child(3){ transform:translateY(-7.5px) rotate(-45deg); }
+
+  .eb-scrim{
+    position:fixed; inset:0; z-index:1000; background:rgba(4,4,4,.65);
+    backdrop-filter:blur(3px); -webkit-backdrop-filter:blur(3px);
+    opacity:0; visibility:hidden; transition:opacity .4s ease, visibility .4s ease;
+    display:block; margin:0; border:0;
+  }
+  .eb-menu-cb:checked ~ .eb-scrim{ opacity:1; visibility:visible; }
+
+  .eb-sidepanel{
+    position:fixed; top:0; right:0; bottom:0; z-index:1001;
+    width:min(400px,86vw); display:flex; flex-direction:column;
+    background:linear-gradient(180deg,#131312 0%, #0d0d0c 100%);
+    border-left:1px solid var(--line-hi);
+    box-shadow:-40px 0 90px -30px rgba(0,0,0,1);
+    transform:translateX(100%); transition:transform .5s cubic-bezier(.16,.84,.44,1);
+    overflow-y:auto;
+  }
+  .eb-menu-cb:checked ~ .eb-sidepanel{ transform:translateX(0); }
+  .eb-sp-head{ padding:2rem 2rem 1.4rem; }
+  .eb-sp-name{
+    font-family:var(--display); font-weight:400; font-size:1.7rem; line-height:1;
+    letter-spacing:.02em; text-transform:uppercase; text-decoration:none !important; display:inline-block;
+    background:linear-gradient(176deg,#fff 0%, #e8e7e3 45%, #a5a59f 100%);
+    -webkit-background-clip:text; background-clip:text; color:transparent;
+  }
+  .eb-sp-sub{ display:block; margin-top:.5rem; font-size:10px; letter-spacing:.2em; text-transform:uppercase; color:var(--dim); }
+  .eb-sp-links{ display:flex; flex-direction:column; padding:.5rem 0 1rem; }
+  .eb-sp-links a{
+    position:relative; display:flex; align-items:center; justify-content:space-between; gap:1rem;
+    padding:1.05rem 2rem; color:var(--body) !important; text-decoration:none !important;
+    font-family:var(--display); font-weight:400; font-size:1.35rem; letter-spacing:.03em; text-transform:uppercase;
+    border-top:1px solid rgba(42,42,39,.7);
+    transition:color .25s ease, background .25s ease, padding-left .25s ease;
+  }
+  .eb-sp-links a:last-child{ border-bottom:1px solid rgba(42,42,39,.7); }
+  .eb-sp-links a .eb-idx{ font-family:var(--sans); font-size:9.5px; letter-spacing:.2em; color:var(--dim); }
+  .eb-sp-links a:hover, .eb-sp-links a:focus-visible, .eb-sp-links a.is-active{
+    color:var(--gold-soft) !important; background:rgba(255,255,255,.035); padding-left:2.5rem;
+  }
+  .eb-sp-links a.is-active .eb-idx{ color:var(--gold); }
+  .eb-sp-foot{ margin-top:auto; padding:1.6rem 2rem 2rem; }
+  .eb-sp-foot > a{ display:block; color:var(--muted) !important; text-decoration:none !important; font-size:12.5px; margin-bottom:.45rem; transition:color .25s ease; }
+  .eb-sp-foot > a:hover{ color:var(--gold-soft) !important; }
+  .eb-sp-social{ display:flex; gap:.6rem; margin-top:1.1rem; }
+  .eb-sp-social a{
+    width:36px; height:36px; border-radius:50%; border:1px solid var(--line-hi);
+    display:flex; align-items:center; justify-content:center; color:var(--ink) !important;
+    text-decoration:none !important;
+    transition:border-color .25s ease, color .25s ease, transform .25s ease;
+  }
+  .eb-sp-social a:hover{ border-color:var(--gold); color:var(--gold-soft) !important; transform:translateY(-2px); }
+  .eb-sp-social svg{ width:16px; height:16px; }
+
+  /* ================= HERO ================= */
+  .eb-hero{
+    position:relative; min-height:100vh; width:100%; overflow:hidden;
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    isolation:isolate; padding:7rem 0 5rem;
+  }
+  .eb-hero-bg{
+    position:absolute; inset:-8% 0 -8% 0;
+    background-image:url('https://eshun.net/wp-content/uploads/2026/07/hero-background.jpg'); /* SWAP IMAGE */
+    background-size:cover; background-position:center 55%;
+    filter:grayscale(.25) contrast(1.12) brightness(.85); will-change:transform;
+  }
+  /* resolves to exactly --bg at the bottom, so there is no seam into the page */
+  .eb-hero-scrim{
+    position:absolute; inset:0;
+    background:
+      radial-gradient(ellipse 55% 45% at 50% 44%, rgba(255,255,255,.10) 0%, transparent 60%),
+      radial-gradient(ellipse 90% 75% at 50% 45%, transparent 28%, rgba(10,10,10,.82) 100%),
+      linear-gradient(180deg, rgba(10,10,10,.9) 0%, rgba(10,10,10,.4) 26%, rgba(10,10,10,.5) 55%, rgba(10,10,10,.94) 86%, var(--bg) 100%);
+  }
+  .eb-ghost-marquee{
+    position:absolute; top:76%; left:0; right:0; transform:translateY(-50%);
+    z-index:1; pointer-events:none; overflow:hidden; opacity:.026;
+  }
+  .eb-ghost-track{
+    display:flex; width:max-content; animation:eb-drift-r 48s linear infinite;
+    font-family:var(--display); text-transform:uppercase;
+    font-size:clamp(6rem,20vw,18rem); line-height:1; color:#fff; white-space:nowrap;
+  }
+  .eb-ghost-track span{ padding-right:.25em; }
+  @keyframes eb-drift-r{ from{ transform:translateX(0); } to{ transform:translateX(-50%); } }
+
+  .eb-suits{ position:absolute; inset:0; pointer-events:none; z-index:2; }
+  .eb-suit{ position:absolute; opacity:.45; transition:transform .35s cubic-bezier(.2,.7,.3,1), opacity 1.3s ease; }
+  .eb-js .eb-suit{ opacity:0; transform:translateY(40px); }
+  body.eb-loaded .eb-suit{ opacity:.45; }
+  body.eb-loaded .eb-suit.s1{ transition-delay:.1s; }
+  body.eb-loaded .eb-suit.s2{ transition-delay:.3s; }
+  body.eb-loaded .eb-suit.s3{ transition-delay:.5s; }
+  body.eb-loaded .eb-suit.s4{ transition-delay:.7s; }
+  .eb-suit svg{ display:block; width:100%; height:auto; filter:drop-shadow(0 2px 3px rgba(0,0,0,.9)) drop-shadow(0 0 14px rgba(255,255,255,.22)); }
+  .eb-suit.s1{ top:11%;    left:3.5%;  width:min(7vw,92px); }
+  .eb-suit.s2{ top:14%;    right:3.5%; width:min(6vw,78px); }
+  .eb-suit.s3{ bottom:13%; left:5%;    width:min(6.5vw,84px); }
+  .eb-suit.s4{ bottom:9%;  right:4%;   width:min(7.5vw,98px); }
+  @media (max-width:1100px){
+    .eb-suit.s1{ top:9%; left:2%; } .eb-suit.s2{ top:12%; right:2%; }
+    .eb-suit.s3{ bottom:11%; left:3%; } .eb-suit.s4{ bottom:8%; right:2.5%; }
+  }
+  .eb-suit.s1 svg{ animation:eb-bobA 7s ease-in-out infinite; }
+  .eb-suit.s2 svg{ animation:eb-bobB 7s ease-in-out infinite .2s; }
+  .eb-suit.s3 svg{ animation:eb-bobC 7s ease-in-out infinite .4s; }
+  .eb-suit.s4 svg{ animation:eb-bobD 7s ease-in-out infinite .6s; }
+  @keyframes eb-bobA{ 0%,100%{transform:translateY(0) rotate(-2deg);} 50%{transform:translateY(-16px) rotate(2deg);} }
+  @keyframes eb-bobB{ 0%,100%{transform:translateY(0) rotate(3deg);} 50%{transform:translateY(14px) rotate(-3deg);} }
+  @keyframes eb-bobC{ 0%,100%{transform:translateY(0) rotate(-3deg);} 50%{transform:translateY(-12px) rotate(2deg);} }
+  @keyframes eb-bobD{ 0%,100%{transform:translateY(0) rotate(2deg);} 50%{transform:translateY(13px) rotate(-2deg);} }
+  @media (max-width:760px){ .eb-suit{ opacity:.25 !important; } }
+
+  /* The stack is flex-centred in the hero. Pushing a margin onto the bottom
+     lifts the whole block by half that amount, so the name lands nearer the
+     optical centre (~40% of the viewport) instead of the geometric one. */
+  .eb-hero-content{
+    position:relative; z-index:3; width:100%; text-align:center; padding:0 1.25rem;
+    margin-bottom:clamp(3rem, 14vh, 10rem); will-change:transform;
+  }
+  /* keep the name clear of the section rail on wide screens */
+  @media (min-width:1181px){ .eb-hero-content{ padding-left:130px; padding-right:130px; } }
+  .eb-hero-content::before{
+    content:''; position:absolute; left:50%; top:50%; width:min(120vw,1200px); height:min(70vh,620px);
+    transform:translate(-50%,-50%);
+    background:radial-gradient(ellipse at center, rgba(255,255,255,.10) 0%, transparent 62%);
+    pointer-events:none; z-index:-1;
+  }
+  .eb-hero-eyebrow{
+    display:inline-flex; align-items:center; gap:10px;
+    font-size:11px; letter-spacing:.3em; text-transform:uppercase; font-weight:600;
+    color:var(--gold); margin-bottom:1.6rem;
+    padding:8px 16px; border:1px solid var(--line-hi); border-radius:999px;
+    background:rgba(10,10,10,.5); backdrop-filter:blur(6px); -webkit-backdrop-filter:blur(6px);
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.08), 0 10px 26px -14px rgba(0,0,0,1);
+    transition:opacity .9s ease, transform .9s ease;
+  }
+  .eb-js .eb-hero-eyebrow{ opacity:0; transform:translateY(20px); }
+  .eb-js body.eb-loaded .eb-hero-eyebrow,
+  body.eb-loaded .eb-hero-eyebrow{ opacity:1; transform:translateY(0); transition-delay:.25s; }
+
+  /* No-JS fallback: a safe clamp that is allowed to wrap so it can never
+     overflow. With JS, fitName() measures and sets the exact size on one line. */
+  .eb-name{
+    font-family:var(--display); font-weight:400; text-transform:uppercase;
+    font-size:clamp(2.8rem, 10.5vw, 11rem); line-height:.9; letter-spacing:.01em;
+    display:flex; flex-wrap:wrap; align-items:baseline; justify-content:center;
+    gap:0 .1em; margin:0; perspective:900px;
+  }
+  .eb-js .eb-name{ flex-wrap:nowrap; }
+  .eb-name .eb-word{ display:inline-flex; }
+  .eb-name .eb-ch{
+    display:inline-block;
+    background:linear-gradient(176deg,#ffffff 0%, #f6f5f1 30%, #d8d8d3 60%, #8f8f89 100%);
+    -webkit-background-clip:text; background-clip:text; color:transparent;
+    filter:drop-shadow(0 1px 0 rgba(0,0,0,.85)) drop-shadow(0 3px 1px rgba(0,0,0,.45)) drop-shadow(0 26px 45px rgba(0,0,0,.75));
+    opacity:0; transform:translateY(.5em) rotateX(-55deg);
+    transition:opacity .7s cubic-bezier(.16,.84,.44,1), transform .7s cubic-bezier(.16,.84,.44,1);
+    will-change:transform, opacity;
+  }
+  body.eb-loaded .eb-name .eb-ch{ opacity:1; transform:translateY(0) rotateX(0deg); }
+  @media (hover:hover){
+    .eb-name .eb-ch{ transition:opacity .7s cubic-bezier(.16,.84,.44,1), transform .35s cubic-bezier(.2,.9,.3,1); }
+    .eb-name .eb-ch:hover{ transform:translateY(-.06em) scale(1.04); }
+  }
+
+  .eb-marquee{
+    position:relative; z-index:3; width:100%; margin-top:1.9rem;
+    overflow:hidden; padding:.85rem 0;
+    -webkit-mask-image:linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
+            mask-image:linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
+    transition:opacity 1s ease;
+  }
+  .eb-js .eb-marquee{ opacity:0; }
+  body.eb-loaded .eb-marquee{ opacity:1; transition-delay:1s; }
+  /* rules that fade out at both ends instead of cutting straight across */
+  .eb-marquee::before, .eb-marquee::after{
+    content:''; position:absolute; left:0; right:0; height:1px; pointer-events:none; z-index:2;
+    background:linear-gradient(90deg, transparent, rgba(58,58,53,.85) 22%, rgba(58,58,53,.85) 78%, transparent);
+  }
+  .eb-marquee::before{ top:0; } .eb-marquee::after{ bottom:0; }
+  .eb-marquee-track{
+    display:flex; width:max-content; animation:eb-drift-l 34s linear infinite;
+    font-size:12px; font-weight:600; letter-spacing:.26em; text-transform:uppercase; color:var(--body); white-space:nowrap;
+  }
+  .eb-marquee-track span{ padding:0 1.4rem; display:inline-flex; align-items:center; gap:1.4rem; }
+  .eb-marquee-track i{ font-style:normal; color:var(--gold); font-size:14px; }
+  @keyframes eb-drift-l{ from{ transform:translateX(0); } to{ transform:translateX(-50%); } }
+  .eb-marquee:hover .eb-marquee-track{ animation-play-state:paused; }
+
+  .eb-hero-meta{
+    position:relative; z-index:3; display:flex; flex-wrap:wrap; justify-content:center;
+    gap:1.5rem 2.5rem; margin-top:1.9rem;
+    transition:opacity .9s ease, transform .9s ease;
+  }
+  .eb-js .eb-hero-meta{ opacity:0; transform:translateY(18px); }
+  body.eb-loaded .eb-hero-meta{ opacity:1; transform:translateY(0); transition-delay:1.15s; }
+  .eb-hero-meta div{ text-align:center; }
+  .eb-hero-meta dt{ font-size:9.5px; letter-spacing:.26em; text-transform:uppercase; color:var(--dim); margin-bottom:.4rem; }
+  .eb-hero-meta dd{ font-size:12.5px; font-weight:600; letter-spacing:.06em; color:var(--ink); }
+
+  /* The homepage hero needs no lede — the name says it. Every other page does,
+     so it sits between the title and the marquee and picks up the same
+     staggered entrance (eyebrow .25s, letters .45s+, lede .85s, strip 1s, meta 1.15s). */
+  .eb-hero-lede{
+    position:relative; z-index:3; margin:1.6rem auto 0; max-width:52ch;
+    font-size:15px; line-height:1.8; color:var(--body);
+    transition:opacity .9s ease, transform .9s ease;
+  }
+  .eb-js .eb-hero-lede{ opacity:0; transform:translateY(18px); }
+  body.eb-loaded .eb-hero-lede{ opacity:1; transform:translateY(0); transition-delay:.85s; }
+
+  /* ================= MESSAGE FORM ================= */
+  /* Pure HTML POST — no JavaScript anywhere in it, so it still works after
+     WordPress strips the <script>. Native validation (required + type="email")
+     does the checking; Formspree does the sending. */
+  .eb-form{
+    position:relative; max-width:760px; margin:0 auto;
+    background:linear-gradient(180deg,var(--surface-hi),var(--surface));
+    border:1px solid var(--line); border-radius:10px; box-shadow:var(--e2);
+    padding:2.25rem 2.25rem 2rem;
+  }
+  .eb-form::after{
+    content:'\2660'; position:absolute; right:18px; top:14px;
+    font-size:1.5rem; line-height:1; color:var(--ink); opacity:.10; pointer-events:none;
+  }
+  .eb-form-grid{ display:grid; grid-template-columns:1fr 1fr; gap:1.15rem 1.25rem; }
+  .eb-field{ display:flex; flex-direction:column; gap:.55rem; min-width:0; }
+  .eb-field.is-full{ grid-column:1 / -1; }
+  .eb-field label{
+    font-size:9.5px; letter-spacing:.26em; text-transform:uppercase;
+    color:var(--dim); font-weight:600;
+  }
+  .eb-field label .eb-req{ color:var(--gold); margin-left:.3em; }
+  .eb-input, .eb-textarea{
+    width:100%; display:block; font-family:var(--sans); font-size:14px; line-height:1.6;
+    color:var(--ink); background:rgba(10,10,10,.55);
+    border:1px solid var(--line-hi); border-radius:6px; padding:.85rem 1rem;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.04);
+    transition:border-color .25s ease, background .25s ease, box-shadow .25s ease;
+  }
+  .eb-input::placeholder, .eb-textarea::placeholder{ color:var(--dim); opacity:1; }
+  .eb-input:hover, .eb-textarea:hover{ border-color:#4a4a44; }
+  .eb-input:focus, .eb-textarea:focus{
+    outline:none; border-color:var(--gold); background:rgba(10,10,10,.78);
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.06), 0 0 0 3px rgba(216,216,211,.16);
+  }
+  .eb-textarea{ resize:vertical; min-height:158px; }
+  /* only scold a field the visitor has actually filled in wrong */
+  .eb-input:not(:placeholder-shown):invalid,
+  .eb-textarea:not(:placeholder-shown):invalid{ border-color:#8a5a52; }
+
+  .eb-form-foot{
+    display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between;
+    gap:1rem; margin-top:1.7rem;
+  }
+  .eb-form-note{ font-size:12px; line-height:1.6; color:var(--muted); max-width:38ch; }
+  .eb-submit{
+    display:inline-flex; align-items:center; justify-content:space-between; gap:16px;
+    padding:15px 22px; cursor:pointer; font-family:var(--sans);
+    background:var(--gold); border:1px solid var(--gold); border-radius:4px;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.35), 0 10px 24px -12px rgba(0,0,0,1);
+    color:#0a0a0a; font-size:11px; font-weight:700; letter-spacing:.2em; text-transform:uppercase;
+    position:relative; overflow:hidden;
+    transition:background .2s ease, border-color .2s ease, transform .2s ease, box-shadow .2s ease;
+  }
+  .eb-submit:hover{
+    background:#fff; border-color:#fff; transform:translateY(-2px);
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.5), 0 16px 30px -14px rgba(0,0,0,1);
+  }
+  .eb-submit:active{ transform:translateY(0); }
+  .eb-submit .eb-arrow{ font-size:14px; letter-spacing:0; }
+  /* spam honeypot — a bot fills it, a person never sees it */
+  .eb-hp{ position:absolute; left:-9999px; top:auto; width:1px; height:1px; overflow:hidden; }
+
+  /* ================= CONTACT CARDS ================= */
+  .eb-cgrid{ display:grid; grid-template-columns:repeat(3,1fr); gap:1.25rem; max-width:1040px; margin:0 auto; }
+  .eb-ccard{
+    position:relative; display:flex; align-items:center; gap:1.15rem; overflow:hidden;
+    padding:1.6rem 1.5rem;
+    background:linear-gradient(180deg,var(--surface-hi) 0%, var(--surface) 60%, #121211 100%);
+    border:1px solid var(--line); border-radius:8px; box-shadow:var(--e1);
+    text-decoration:none !important; color:inherit !important;
+    transition:transform .4s cubic-bezier(.16,.84,.44,1), box-shadow .4s ease, border-color .3s ease;
+  }
+  .eb-ccard:hover{ transform:translateY(-6px); box-shadow:var(--e2); border-color:var(--line-hi); }
+  /* the suit pip sits in the corner the way it would on a playing card */
+  .eb-ccard::after{
+    content:attr(data-suit); position:absolute; right:15px; top:11px;
+    font-size:1.45rem; line-height:1; color:var(--ink); opacity:.10; pointer-events:none;
+    transition:opacity .35s ease, transform .35s ease;
+  }
+  .eb-ccard:hover::after{ opacity:.32; transform:translateY(-2px) scale(1.08); }
+  .eb-cicon{
+    flex:0 0 auto; width:50px; height:50px; border-radius:50%;
+    border:1px solid var(--line-hi); color:var(--gold);
+    background:linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,0));
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.08), 0 8px 18px -10px rgba(0,0,0,1);
+    display:flex; align-items:center; justify-content:center;
+    transition:border-color .3s ease, color .3s ease;
+  }
+  .eb-ccard:hover .eb-cicon{ border-color:var(--gold); color:var(--gold-soft); }
+  .eb-cicon svg{ width:19px; height:19px; }
+  .eb-ctext{ min-width:0; }
+  .eb-clabel{ display:block; font-size:9.5px; letter-spacing:.24em; text-transform:uppercase; color:var(--dim); margin-bottom:.45rem; }
+  .eb-cvalue{
+    display:block; font-family:var(--display); font-weight:400; text-transform:uppercase;
+    font-size:clamp(.95rem,1.5vw,1.12rem); line-height:1.15; letter-spacing:.02em;
+    color:var(--ink); overflow-wrap:anywhere;
+  }
+  .eb-ccard.is-static{ cursor:default; }
+  .eb-ccard.is-static:hover{ transform:none; box-shadow:var(--e1); border-color:var(--line); }
+  .eb-ccard.is-static:hover .eb-cicon{ border-color:var(--line-hi); color:var(--gold); }
+  @media (max-width:900px){ .eb-cgrid{ grid-template-columns:repeat(2,1fr); } }
+  @media (max-width:600px){ .eb-cgrid{ grid-template-columns:1fr; } }
+
+  .eb-cnote{
+    max-width:1040px; margin:2.75rem auto 0;
+    display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:1.25rem;
+    padding:1.6rem 1.7rem; border:1px solid var(--line); border-radius:8px;
+    background:linear-gradient(180deg, rgba(255,255,255,.028), rgba(255,255,255,.008));
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.05);
+  }
+  .eb-cnote p{ font-size:13.5px; line-height:1.7; color:var(--body); margin:0; max-width:60ch; }
+  .eb-cnote p strong{ color:var(--ink); font-weight:600; }
+
+  /* ================= FOOTER ================= */
+  .eb-footer{ position:relative; font-family:var(--sans); color:var(--muted); }
+  .eb-footer-body{ padding:3rem 1.5rem 2rem; background:transparent; }
+  .eb-footer-inner{ max-width:var(--wrap); margin:0 auto; display:grid; grid-template-columns:1.1fr 1fr auto; gap:2.5rem 3rem; align-items:start; }
+  .eb-footer-brand{ max-width:280px; }
+  .eb-footer-name{
+    font-family:var(--display); font-weight:400; font-size:1.8rem; line-height:1; letter-spacing:.02em; text-transform:uppercase;
+    background:linear-gradient(176deg,#fff 0%, #e8e7e3 45%, #a5a59f 100%);
+    -webkit-background-clip:text; background-clip:text; color:transparent; filter:drop-shadow(0 1px 0 rgba(0,0,0,.8));
+  }
+  .eb-footer-tag{ display:block; margin-top:.6rem; font-size:11px; letter-spacing:.16em; text-transform:uppercase; color:var(--dim); }
+  .eb-footer-contact{ margin-top:1rem; display:flex; flex-direction:column; gap:.4rem; }
+  .eb-footer-contact a{ color:var(--muted) !important; text-decoration:none !important; font-size:12.5px; transition:color .25s ease; }
+  .eb-footer-contact a:hover{ color:var(--gold-soft) !important; }
+  .eb-footer-links{ display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:.85rem 1.75rem; align-content:start; }
+  .eb-footer-links a{ color:var(--muted) !important; text-decoration:none !important; font-size:11px; font-weight:600; letter-spacing:.18em; text-transform:uppercase; transition:color .25s ease; }
+  .eb-footer-links a:hover{ color:var(--gold-soft) !important; }
+  .eb-footer-social{ display:flex; gap:.75rem; justify-self:end; }
+  @media (max-width:900px){
+    .eb-footer-inner{ grid-template-columns:1fr; gap:2rem; }
+    .eb-footer-social{ justify-self:start; }
+  }
+  .eb-footer-social a{
+    width:38px; height:38px; border-radius:50%; border:1px solid var(--line-hi); color:var(--ink) !important;
+    background:linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,0));
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.07), 0 8px 18px -10px rgba(0,0,0,1);
+    display:flex; align-items:center; justify-content:center; text-decoration:none !important;
+    transition:border-color .25s ease, color .25s ease, transform .25s ease;
+  }
+  .eb-footer-social a:hover{ border-color:var(--gold); color:var(--gold-soft) !important; transform:translateY(-3px); }
+  .eb-footer-social svg{ width:17px; height:17px; }
+  .eb-footer-bottom{ max-width:var(--wrap); margin:2.25rem auto 0; padding-top:1.25rem; border-top:1px solid var(--line); display:flex; justify-content:space-between; flex-wrap:wrap; gap:.5rem; font-size:10px; letter-spacing:.24em; text-transform:uppercase; color:#4a4a46; }
+
+  /* =========================================================================
+     MOBILE / TOUCH — same breakpoints and treatment as the homepage
+     ========================================================================= */
+  @media (hover:none){
+    .eb-btn:hover, .eb-ccard:hover, .eb-footer-social a:hover,
+    .eb-sp-social a:hover, .eb-logo:hover{ transform:none; }
+  }
+
+  @media (max-width:680px){
+    html{ -webkit-text-size-adjust:100%; }
+
+    .eb-logo{ top:14px; left:14px; height:46px; padding:0 13px; gap:8px; font-size:.98rem; letter-spacing:.04em; }
+    .eb-logo svg{ width:13px; height:13px; }
+    .eb-menu-cb, .eb-menu-btn{ top:14px; right:14px; width:46px; height:46px; }
+    .eb-menu-btn{ gap:5px; }
+    .eb-menu-btn span{ width:19px; }
+    .eb-menu-cb:checked ~ .eb-menu-btn span:nth-child(1){ transform:translateY(6.5px) rotate(45deg); }
+    .eb-menu-cb:checked ~ .eb-menu-btn span:nth-child(3){ transform:translateY(-6.5px) rotate(-45deg); }
+    .eb-topfade{ height:88px; }
+
+    /* ---- hero ---- */
+    .eb-hero{ min-height:100svh; padding:6.5rem 0 3.5rem; }
+    .eb-hero-content{ padding:0 1.5rem; margin-bottom:clamp(2rem, 9vh, 5rem); }
+    .eb-hero-eyebrow{ font-size:9px; letter-spacing:.2em; padding:7px 13px; margin-bottom:1.2rem; }
+    .eb-name{ gap:0 .16em; }
+    /* the drifting ghost word was smearing straight through the meta rows */
+    .eb-ghost-marquee{ display:none; }
+    .eb-marquee{ margin-top:1.4rem; padding:.7rem 0; }
+    .eb-marquee-track{ font-size:10.5px; letter-spacing:.2em; }
+    .eb-marquee-track span{ padding:0 1rem; gap:1rem; }
+    .eb-hero-meta{ gap:1rem 1.75rem; margin-top:1.4rem; }
+    .eb-hero-meta dt{ font-size:8.5px; letter-spacing:.2em; margin-bottom:.25rem; }
+    .eb-hero-meta dd{ font-size:12px; }
+    .eb-hero-lede{ font-size:14px; line-height:1.75; margin-top:1.25rem; }
+
+    .eb-sec{ padding:4rem 1.25rem; }
+    .eb-sec-head{ margin-bottom:2.25rem; }
+    .eb-label{ font-size:10px; letter-spacing:.22em; }
+    .eb-label.is-centered::before, .eb-label.is-centered::after{ flex:0 0 28px; }
+    .eb-lede{ font-size:14px; }
+    .eb-btn{ padding:14px 16px; gap:12px; }
+
+    .eb-cgrid{ gap:1rem; }
+    .eb-form{ padding:1.6rem 1.25rem 1.4rem; }
+    .eb-form-grid{ grid-template-columns:1fr; gap:1rem; }
+    .eb-form-foot{ flex-direction:column-reverse; align-items:stretch; }
+    .eb-submit{ width:100%; }
+    .eb-form-note{ max-width:none; text-align:center; }
+    .eb-ccard{ padding:1.35rem 1.25rem; gap:1rem; }
+    .eb-cicon{ width:46px; height:46px; }
+    .eb-cnote{ margin-top:2rem; padding:1.35rem 1.25rem; }
+    .eb-cnote .eb-btn{ width:100%; }
+
+    .eb-footer-body{ padding:2.5rem 1.25rem 1.75rem; }
+    .eb-footer-inner{ gap:1.75rem; }
+    .eb-footer-bottom{ margin-top:1.75rem; font-size:9px; letter-spacing:.18em; gap:.35rem; }
+  }
+
+  @media (max-width:365px){
+    .eb-logo{ font-size:.88rem; padding:0 11px; gap:7px; }
+    .eb-hero-eyebrow{ font-size:8.2px; letter-spacing:.16em; padding:6px 11px; }
+    .eb-sp-links a{ font-size:1.2rem; padding:.95rem 1.5rem; }
+    .eb-sp-head, .eb-sp-foot{ padding-left:1.5rem; padding-right:1.5rem; }
+  }
+</style>
+
+<div class="eb-grain" aria-hidden="true"></div>
+<div class="eb-vignette" aria-hidden="true"></div>
+<div class="eb-topfade" aria-hidden="true"></div>
+
+<!-- ============== NAV — logo + menu icon + side panel ============== -->
+<a href="/" class="eb-logo" aria-label="Eshun Burge — home">
+  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7.5-4.7-7.5-10A4.5 4.5 0 0 1 12 7.6 4.5 4.5 0 0 1 19.5 11c0 5.3-7.5 10-7.5 10z"></path></svg>
+  <span>Eshun Burge</span>
+</a>
+
+<input type="checkbox" id="ebMenuToggle" class="eb-menu-cb" aria-label="Toggle menu">
+<div class="eb-menu-btn" aria-hidden="true"><span></span><span></span><span></span></div>
+<label class="eb-scrim" for="ebMenuToggle" aria-hidden="true"></label>
+
+<aside class="eb-sidepanel" id="ebPanel" aria-label="Main menu">
+  <div class="eb-sp-head">
+    <a href="/" class="eb-sp-name">Eshun Burge</a>
+    <span class="eb-sp-sub">Bradenton · Florida</span>
+  </div>
+
+  <nav class="eb-sp-links" aria-label="Primary">
+    <a href="/"><span>Home</span><span class="eb-idx">00</span></a>
+    <a href="/software-design/"><span>Software Design</span><span class="eb-idx">01</span></a>
+    <a href="/graphic-design/"><span>Graphic Design</span><span class="eb-idx">02</span></a>
+    <a href="/science-projects/"><span>Science Projects</span><span class="eb-idx">03</span></a>
+    <a href="/just-for-fun/"><span>Just for Fun</span><span class="eb-idx">04</span></a>
+    <a href="/about/"><span>About Me</span><span class="eb-idx">05</span></a>
+    <a href="/links/"><span>Links</span><span class="eb-idx">06</span></a>
+    <a href="/contact/" class="is-active" aria-current="page"><span>Contact</span><span class="eb-idx">07</span></a>
+  </nav>
+
+  <div class="eb-sp-foot">
+    <a href="mailto:eshunburge@gmail.com">eshunburge@gmail.com</a>
+    <a href="tel:+19419009134">+1 (941) 900-9134</a>
+    <div class="eb-sp-social">
+      <a href="https://www.linkedin.com/in/eshunburge" target="_blank" rel="noopener" aria-label="LinkedIn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="7" r="2"></circle><circle cx="18" cy="7" r="2"></circle><circle cx="12" cy="18" r="2"></circle><path d="M7.7 8.5L11 16M16.3 8.5L13 16M8.2 7h7.6"></path></svg>
+      </a>
+      <a href="https://github.com/EshunB" target="_blank" rel="noopener" aria-label="GitHub">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 6.5L3 12l5.5 5.5M15.5 6.5L21 12l-5.5 5.5"></path></svg>
+      </a>
+      <a href="https://www.instagram.com/eshunburge" target="_blank" rel="noopener" aria-label="Instagram">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="5"></rect><circle cx="12" cy="12" r="3.6"></circle><circle cx="16.3" cy="7.7" r="0.6" fill="currentColor" stroke="none"></circle></svg>
+      </a>
+    </div>
+  </div>
+</aside>
+
+<!-- ============== HERO — the homepage hero, verbatim ============== -->
+<section class="eb-hero" id="hero">
+  <div class="eb-hero-bg" id="ebHeroBg"></div>
+  <div class="eb-hero-scrim"></div>
+
+  <div class="eb-ghost-marquee" aria-hidden="true">
+    <div class="eb-ghost-track"><span>ESHUN BURGE — ESHUN BURGE — </span><span>ESHUN BURGE — ESHUN BURGE — </span></div>
+  </div>
+
+  <div class="eb-suits" id="ebSuits">
+    <div class="eb-suit s1" data-depth="24"><svg viewBox="0 0 100 100" fill="none" stroke="#e8e7e3" stroke-width="2.2"><path d="M50,8 C22,32 10,52 24,66 C31,73 42,72 46,63 C47,80 40,86 29,92 L71,92 C60,86 53,80 54,63 C58,72 69,73 76,66 C90,52 78,32 50,8 Z"></path></svg></div>
+    <div class="eb-suit s2" data-depth="40"><svg viewBox="0 0 100 100" fill="none" stroke="#e8e7e3" stroke-width="2.2"><path d="M50,90 C14,64 2,38 22,22 C34,12 48,18 50,30 C52,18 66,12 78,22 C98,38 86,64 50,90 Z"></path></svg></div>
+    <div class="eb-suit s3" data-depth="30"><svg viewBox="0 0 100 100" fill="none" stroke="#e8e7e3" stroke-width="2.2"><path d="M50,4 L92,50 L50,96 L8,50 Z"></path></svg></div>
+    <div class="eb-suit s4" data-depth="18"><svg viewBox="0 0 100 100" fill="none" stroke="#e8e7e3" stroke-width="2.2"><circle cx="50" cy="34" r="17"></circle><circle cx="31" cy="55" r="17"></circle><circle cx="69" cy="55" r="17"></circle><path d="M44,68 L38,94 L62,94 L56,68 Z"></path></svg></div>
+  </div>
+
+  <div class="eb-hero-content" id="ebHeroContent">
+    <div class="eb-hero-eyebrow">Get In Touch</div>
+
+    <h1 class="eb-name" id="ebName" data-name="Contact">Contact</h1>
+
+    <p class="eb-hero-lede">Collaborations, internships, competition teams, speaking, or just a question about something on this site — every channel below reaches me directly.</p>
+
+    <div class="eb-marquee" aria-hidden="true">
+      <div class="eb-marquee-track">
+        <span>Software Design <i>♠</i> Graphic Design <i>♥</i> Science Research <i>♦</i> Public Speaking <i>♣</i> Website Design <i>♠</i> Photography <i>♥</i></span>
+        <span>Software Design <i>♠</i> Graphic Design <i>♥</i> Science Research <i>♦</i> Public Speaking <i>♣</i> Website Design <i>♠</i> Photography <i>♥</i></span>
+      </div>
+    </div>
+
+    <dl class="eb-hero-meta">
+      <div><dt>Fastest Route</dt><dd>Email</dd></div>
+      <div><dt>Based In</dt><dd>Bradenton, FL</dd></div>
+      <div><dt>Open To</dt><dd>Collaborations</dd></div>
+    </dl>
+  </div>
+</section>
+
+<div class="eb-zebra"></div>
+
+<!-- ============== MESSAGE FORM ============== -->
+<!-- ============================================================
+     Wired to Formspree form xaewjpow. Nothing left to configure.
+     The very first submission arrives with a one-time confirmation
+     link — click it and the form is live for everyone after that.
+     Free tier is about 50 messages a month; if you ever move the
+     form, the only line to change is the action= below.
+     ============================================================ -->
+<section class="eb-sec" id="message">
+  <div class="eb-wrap">
+    <div class="eb-sec-head is-centered eb-reveal">
+      <div class="eb-label is-centered">Send a Message</div>
+      <h2 class="eb-h2">Write to Me Directly</h2>
+      <p class="eb-lede">Fill this in and it lands in my inbox. If you would rather use your own email or another channel, the six below all reach me too.</p>
+    </div>
+
+    <form class="eb-form eb-reveal" action="https://formspree.io/f/xaewjpow" method="POST">
+      <!-- reply-to subject line on the email that reaches you -->
+      <input type="hidden" name="_subject" value="New message from eshun.net">
+      <div class="eb-hp" aria-hidden="true">
+        <label for="ebHp">Leave this empty</label>
+        <input id="ebHp" type="text" name="_gotcha" tabindex="-1" autocomplete="off">
+      </div>
+
+      <div class="eb-form-grid">
+        <div class="eb-field">
+          <label for="ebFName">Your Name <span class="eb-req">*</span></label>
+          <input class="eb-input" id="ebFName" type="text" name="name" placeholder="Jane Doe" required="" autocomplete="name">
+        </div>
+
+        <div class="eb-field">
+          <label for="ebFEmail">Your Email <span class="eb-req">*</span></label>
+          <input class="eb-input" id="ebFEmail" type="email" name="email" placeholder="jane@example.com" required="" autocomplete="email">
+        </div>
+
+        <div class="eb-field is-full">
+          <label for="ebFSubject">Subject</label>
+          <input class="eb-input" id="ebFSubject" type="text" name="subject" placeholder="Collaboration, question, competition team…">
+        </div>
+
+        <div class="eb-field is-full">
+          <label for="ebFMessage">Message <span class="eb-req">*</span></label>
+          <textarea class="eb-textarea" id="ebFMessage" name="message" placeholder="Tell me what you have in mind." required=""></textarea>
+        </div>
+      </div>
+
+      <div class="eb-form-foot">
+        <p class="eb-form-note">I read everything and usually reply within a day or two.</p>
+        <button class="eb-submit" type="submit">
+          <span>Send Message</span><span class="eb-arrow">→</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</section>
+
+<!-- ============== CONTACT CARDS ============== -->
+<section class="eb-sec" id="contact">
+  <div class="eb-wrap">
+    <div class="eb-sec-head is-centered eb-reveal">
+      <div class="eb-label is-centered">Pick a Channel</div>
+      <h2 class="eb-h2">Or Pick a Channel</h2>
+      <p class="eb-lede">Email is the one I check most. Everything else is live too — pick whichever suits you.</p>
+    </div>
+
+    <div class="eb-cgrid">
+      <a class="eb-ccard eb-reveal" href="mailto:eshunburge@gmail.com" data-suit="♠">
+        <span class="eb-cicon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"></rect><path d="M3.5 6.5l8.5 6 8.5-6"></path></svg>
+        </span>
+        <span class="eb-ctext">
+          <span class="eb-clabel">Email</span>
+          <span class="eb-cvalue">eshunburge@gmail.com</span>
+        </span>
+      </a>
+
+      <a class="eb-ccard eb-reveal" style="transition-delay:.06s" href="tel:+19419009134" data-suit="♥">
+        <span class="eb-cicon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6.4 4h3.1l1.5 3.9-2 1.5a12.3 12.3 0 0 0 5.6 5.6l1.5-2 3.9 1.5v3.1a2 2 0 0 1-2.2 2A16.2 16.2 0 0 1 4.4 6.2 2 2 0 0 1 6.4 4z"></path></svg>
+        </span>
+        <span class="eb-ctext">
+          <span class="eb-clabel">Phone</span>
+          <span class="eb-cvalue">+1 (941) 900-9134</span>
+        </span>
+      </a>
+
+      <a class="eb-ccard eb-reveal" style="transition-delay:.12s" href="https://www.linkedin.com/in/eshunburge" target="_blank" rel="noopener" data-suit="♦">
+        <span class="eb-cicon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="7" r="2"></circle><circle cx="18" cy="7" r="2"></circle><circle cx="12" cy="18" r="2"></circle><path d="M7.7 8.5L11 16M16.3 8.5L13 16M8.2 7h7.6"></path></svg>
+        </span>
+        <span class="eb-ctext">
+          <span class="eb-clabel">LinkedIn</span>
+          <span class="eb-cvalue">/in/eshunburge</span>
+        </span>
+      </a>
+
+      <a class="eb-ccard eb-reveal" style="transition-delay:.18s" href="https://www.instagram.com/eshunburge" target="_blank" rel="noopener" data-suit="♣">
+        <span class="eb-cicon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="5"></rect><circle cx="12" cy="12" r="3.6"></circle><circle cx="16.3" cy="7.7" r="0.6" fill="currentColor" stroke="none"></circle></svg>
+        </span>
+        <span class="eb-ctext">
+          <span class="eb-clabel">Instagram</span>
+          <span class="eb-cvalue">@eshunburge</span>
+        </span>
+      </a>
+
+      <a class="eb-ccard eb-reveal" style="transition-delay:.24s" href="https://github.com/EshunB" target="_blank" rel="noopener" data-suit="♠">
+        <span class="eb-cicon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 6.5L3 12l5.5 5.5M15.5 6.5L21 12l-5.5 5.5"></path></svg>
+        </span>
+        <span class="eb-ctext">
+          <span class="eb-clabel">GitHub</span>
+          <span class="eb-cvalue">/EshunB</span>
+        </span>
+      </a>
+
+      <div class="eb-ccard is-static eb-reveal" style="transition-delay:.3s" data-suit="♥">
+        <span class="eb-cicon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s7-5.4 7-11a7 7 0 1 0-14 0c0 5.6 7 11 7 11z"></path><circle cx="12" cy="10" r="2.6"></circle></svg>
+        </span>
+        <span class="eb-ctext">
+          <span class="eb-clabel">Location</span>
+          <span class="eb-cvalue">Bradenton, FL</span>
+        </span>
+      </div>
+    </div>
+
+    <div class="eb-cnote eb-reveal" style="transition-delay:.36s">
+      <p><strong>Student inquiries welcome.</strong> If you're working on a science fair project, a TSA or HOSA event, or a first website and want a second set of eyes, say so in the subject line and I'll get back to you.</p>
+      <a class="eb-btn eb-btn-solid" href="mailto:eshunburge@gmail.com"><span>Email Me</span><span class="eb-arrow">→</span></a>
+    </div>
+  </div>
+</section>
+
+<!-- ============== FOOTER ============== -->
+<footer class="eb-footer">
+  <div class="eb-zebra"></div>
+  <div class="eb-footer-body">
+    <div class="eb-footer-inner eb-reveal">
+      <div class="eb-footer-brand">
+        <div class="eb-footer-name">Eshun Burge</div>
+        <span class="eb-footer-tag">Engineering digital experiences · Bradenton FL</span>
+        <div class="eb-footer-contact">
+          <a href="mailto:eshunburge@gmail.com">eshunburge@gmail.com</a>
+          <a href="tel:+19419009134">+1 (941) 900-9134</a>
+        </div>
+      </div>
+
+      <nav class="eb-footer-links" aria-label="Footer">
+        <a href="/software-design/">Software Design</a>
+        <a href="/graphic-design/">Graphic Design</a>
+        <a href="/science-projects/">Science Projects</a>
+        <a href="/just-for-fun/">Just for Fun</a>
+        <a href="/about/">About Me</a>
+        <a href="/links/">Links</a>
+        <a href="/contact/">Contact</a>
+      </nav>
+
+      <div class="eb-footer-social">
+        <a href="mailto:eshunburge@gmail.com" aria-label="Email">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"></rect><path d="M3.5 6.5l8.5 6 8.5-6"></path></svg>
+        </a>
+        <a href="https://www.instagram.com/eshunburge" aria-label="Instagram" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="5"></rect><circle cx="12" cy="12" r="3.6"></circle><circle cx="16.3" cy="7.7" r="0.6" fill="currentColor" stroke="none"></circle></svg>
+        </a>
+        <a href="https://github.com/EshunB" aria-label="GitHub" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 6.5L3 12l5.5 5.5M15.5 6.5L21 12l-5.5 5.5"></path></svg>
+        </a>
+        <a href="https://www.linkedin.com/in/eshunburge" aria-label="LinkedIn" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="7" r="2"></circle><circle cx="18" cy="7" r="2"></circle><circle cx="12" cy="18" r="2"></circle><path d="M7.7 8.5L11 16M16.3 8.5L13 16M8.2 7h7.6"></path></svg>
+        </a>
+      </div>
+    </div>
+
+    <div class="eb-footer-bottom eb-reveal" style="transition-delay:.1s">
+      <span>© <span id="ebYear">2026</span> Eshun Burge</span>
+      <span>Bradenton, Florida</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function(){
+  /* Tells the CSS that JS is alive. Without this class nothing is hidden,
+     so a stripped <script> degrades to a fully visible, static page. */
+  document.documentElement.classList.add('eb-js');
+
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* ---- size the name to fill the hero width, whatever font loads ---- */
+  function fitName(){
+    var el = document.getElementById('ebName');
+    if (!el || !el.parentElement) return;
+    var box = el.parentElement, cs = getComputedStyle(box);
+    var avail = box.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight);
+    if (avail <= 0) return;
+    el.style.fontSize = '100px';
+    el.style.width = 'max-content'; el.style.maxWidth = 'none';
+    var natural = el.getBoundingClientRect().width;
+    el.style.width = ''; el.style.maxWidth = '';
+    if (!natural) return;
+    /* narrow screens get a wider safety margin so the name never kisses the edge */
+    var fill = window.innerWidth <= 680 ? 0.94 : 0.99;
+    var size = 100 * (avail * fill) / natural;
+    size = Math.max(30, Math.min(size, window.innerHeight * 0.38));
+    el.style.fontSize = size.toFixed(2) + 'px';
+  }
+
+  /* ---- split the name into per-letter spans ---- */
+  (function(){
+    var el = document.getElementById('ebName');
+    if (!el) return;
+    var name = el.getAttribute('data-name') || el.textContent;
+    var words = name.trim().split(/\s+/);
+    el.textContent = '';
+    var i = 0;
+    words.forEach(function(word){
+      var w = document.createElement('span'); w.className = 'eb-word';
+      word.split('').forEach(function(ch){
+        var s = document.createElement('span');
+        s.className = 'eb-ch'; s.textContent = ch;
+        s.style.transitionDelay = (0.45 + i * 0.045) + 's';
+        w.appendChild(s); i++;
+      });
+      el.appendChild(w);
+    });
+    el.setAttribute('aria-label', name);
+  })();
+
+  fitName();
+  window.addEventListener('resize', fitName);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(fitName);
+  setTimeout(fitName, 800);
+
+  function markLoaded(){
+    requestAnimationFrame(function(){
+      document.body.classList.add('eb-loaded');
+      var chars = document.querySelectorAll('.eb-name .eb-ch');
+      if (!chars.length) return;
+      var last = 450 + (chars.length * 45) + 800;
+      setTimeout(function(){
+        chars.forEach(function(c){ c.style.transitionDelay = '0s'; c.style.willChange = 'auto'; });
+      }, reduce ? 0 : last);
+    });
+  }
+  if (document.readyState === 'complete') markLoaded();
+  else window.addEventListener('load', markLoaded);
+  setTimeout(markLoaded, 1400);   /* belt and braces if load never fires */
+
+  /* ---- scroll reveals ---- */
+  (function(){
+    var items = document.querySelectorAll('.eb-reveal');
+    if (!items.length) return;
+    if (reduce || !('IntersectionObserver' in window)){
+      items.forEach(function(el){ el.classList.add('is-visible'); });
+      return;
+    }
+    var obs = new IntersectionObserver(function(entries){
+      entries.forEach(function(en){
+        if (!en.isIntersecting) return;
+        en.target.classList.add('is-visible');
+        /* clear the stagger delay once it has played, so hover stays snappy */
+        setTimeout(function(){ en.target.style.transitionDelay = '0s'; }, 1100);
+        obs.unobserve(en.target);
+      });
+    }, { threshold:0.15, rootMargin:'0px 0px -40px 0px' });
+    items.forEach(function(el){ obs.observe(el); });
+  })();
+
+  /* ---- side panel: close on Escape, lock scroll while open ---- */
+  (function(){
+    var cb = document.getElementById('ebMenuToggle'), panel = document.getElementById('ebPanel');
+    if (!cb) return;
+    function sync(){
+      document.body.style.overflow = cb.checked ? 'hidden' : '';
+      if (panel) panel.setAttribute('aria-hidden', cb.checked ? 'false' : 'true');
+    }
+    cb.addEventListener('change', sync);
+    document.addEventListener('keydown', function(e){
+      if (e.key === 'Escape' && cb.checked){ cb.checked = false; sync(); }
+    });
+    sync();
+  })();
+
+  /* ---- suit parallax ---- */
+  (function(){
+    var suits = Array.prototype.slice.call(document.querySelectorAll('.eb-suit'));
+    if (!suits.length || reduce) return;
+    var cx = window.innerWidth/2, cy = window.innerHeight/2;
+    window.addEventListener('mousemove', function(e){
+      var dx = (e.clientX-cx)/cx, dy = (e.clientY-cy)/cy;
+      suits.forEach(function(el){
+        var d = parseFloat(el.dataset.depth) || 20;
+        el.style.transform = 'translate('+(dx*d)+'px,'+(dy*d)+'px)';
+      });
+    });
+    window.addEventListener('resize', function(){ cx = window.innerWidth/2; cy = window.innerHeight/2; });
+  })();
+
+  /* ---- hero scroll parallax ---- */
+  (function(){
+    var bg = document.getElementById('ebHeroBg'), content = document.getElementById('ebHeroContent');
+    if (!bg || !content || reduce) return;
+    var ticking = false;
+    function update(){
+      var y = window.scrollY;
+      if (y < window.innerHeight * 1.2){
+        bg.style.transform = 'translate3d(0,'+(y*0.28)+'px,0)';
+        content.style.transform = 'translate3d(0,'+(y*0.1)+'px,0)';
+        content.style.opacity = Math.max(0, 1 - (y/(window.innerHeight*0.8)));
+      }
+      ticking = false;
+    }
+    window.addEventListener('scroll', function(){ if(!ticking){ ticking = true; requestAnimationFrame(update); } }, {passive:true});
+    update();
+  })();
+
+  /* ---- footer year ---- */
+  (function(){
+    var y = document.getElementById('ebYear');
+    if (y) y.textContent = new Date().getFullYear();
+  })();
+})();
+</script>
